@@ -1,0 +1,753 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0e0e10">
+  <meta name="description" content="Локальный телесуфлёр Dimova Studio — приватная подготовка и репетиция выступлений.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <title>Телесуфлёр · Dimova Studio</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0e0e10;
+      --panel: #171719;
+      --panel-deep: #08090a;
+      --line: rgba(235, 205, 179, .18);
+      --line-strong: rgba(235, 205, 179, .31);
+      --text: #f4eee9;
+      --muted: #938b86;
+      --accent: #c98f70;
+      --accent-soft: #e5c2aa;
+      --success: #849f88;
+      --radius: 20px;
+      --shadow: 0 24px 70px rgba(0, 0, 0, .28);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { min-height: 100%; }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 82% -12%, rgba(108, 66, 49, .18), transparent 37%),
+        radial-gradient(circle at 26% 110%, rgba(74, 40, 55, .08), transparent 33%),
+        var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI Variable", "Segoe UI", Arial, sans-serif;
+      font-size: 14px;
+      overflow-x: hidden;
+    }
+
+    button, textarea, input { font: inherit; }
+
+    button {
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .app-shell {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      height: 112px;
+      padding: 0 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,.075);
+      background: rgba(14, 14, 16, .7);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(217, 156, 126, .42);
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(145deg, rgba(111, 70, 55, .5), rgba(35, 29, 29, .76));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 12px 24px rgba(0,0,0,.2);
+      color: var(--accent-soft);
+    }
+
+    .brand-mark svg { width: 22px; height: 22px; }
+
+    .brand-name {
+      font-size: 21px;
+      line-height: 1.05;
+      font-weight: 710;
+      letter-spacing: -.02em;
+    }
+
+    .brand-note {
+      margin-top: 8px;
+      color: #bc8971;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
+
+    .status-group {
+      display: flex;
+      align-items: center;
+      gap: 29px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .offline-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: #b9b2ad;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 0 4px rgba(132,159,136,.07), 0 0 16px rgba(132,159,136,.35);
+    }
+
+    .version {
+      font-size: 9px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #696360;
+    }
+
+    .workspace {
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 25px 23px 22px;
+      display: grid;
+      grid-template-columns: 390px minmax(0, 1fr);
+      gap: 23px;
+      flex: 1;
+    }
+
+    .editor-card {
+      min-height: 578px;
+      padding: 27px 24px 22px;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(145deg, rgba(26,26,28,.96), rgba(20,20,22,.96));
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,.02);
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      color: #c58b6e;
+      font-size: 10px;
+      font-weight: 760;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, p { margin-top: 0; }
+
+    h1, h2 {
+      margin-bottom: 7px;
+      font-weight: 680;
+      letter-spacing: -.025em;
+    }
+
+    h1 { font-size: 24px; }
+    h2 { font-size: 23px; }
+
+    .helper {
+      max-width: 322px;
+      margin-bottom: 21px;
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.7;
+    }
+
+    .editor-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 15px;
+    }
+
+    .btn {
+      height: 39px;
+      padding: 0 13px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: rgba(255,255,255,.025);
+      color: #d4cbc5;
+      transition: border-color .18s ease, background .18s ease, color .18s ease, transform .18s ease;
+    }
+
+    .btn:hover {
+      border-color: var(--line-strong);
+      background: rgba(255,255,255,.055);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    .btn svg { width: 17px; height: 17px; flex: none; }
+
+    .btn-upload {
+      border-color: rgba(201, 143, 112, .28);
+      background: rgba(201, 143, 112, .08);
+      color: #f0e3db;
+    }
+
+    .btn-clear { padding-inline: 12px; }
+
+    .script-editor {
+      width: 100%;
+      min-height: 286px;
+      flex: 1;
+      resize: none;
+      border: 1px solid rgba(230, 192, 171, .28);
+      border-radius: 15px;
+      outline: none;
+      padding: 23px 18px;
+      background: #151517;
+      color: #e7ded8;
+      font-size: 14px;
+      line-height: 1.72;
+      caret-color: var(--accent-soft);
+      transition: border-color .18s ease, box-shadow .18s ease;
+      scrollbar-color: #5e514b transparent;
+    }
+
+    .script-editor:focus {
+      border-color: rgba(229, 194, 170, .48);
+      box-shadow: 0 0 0 3px rgba(201, 143, 112, .055);
+    }
+
+    .script-editor::placeholder { color: #615d5a; }
+
+    .editor-foot {
+      padding-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: #6e6864;
+      font-size: 10.5px;
+    }
+
+    .stage-column {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stage-heading {
+      min-height: 85px;
+      padding: 9px 3px 13px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .stage-heading .helper { margin: 0; line-height: 1.45; }
+
+    .badges {
+      display: flex;
+      gap: 9px;
+      padding-top: 37px;
+    }
+
+    .badge {
+      height: 32px;
+      padding: 0 12px;
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,255,255,.018);
+      color: #8f8782;
+      font-size: 11px;
+    }
+
+    .preview-card {
+      min-height: 430px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(232, 216, 206, .25);
+      border-radius: 18px;
+      background: var(--panel-deep);
+      box-shadow: 0 28px 80px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.025);
+    }
+
+    .preview-label {
+      position: absolute;
+      z-index: 3;
+      top: 24px;
+      left: 28px;
+      color: #6f5449;
+      font-size: 9px;
+      font-weight: 720;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    .teleprompter-viewport {
+      position: absolute;
+      inset: 0;
+      overflow-y: auto;
+      padding: 104px 52px 115px;
+      scrollbar-width: thin;
+      scrollbar-color: #70564b transparent;
+      scroll-behavior: smooth;
+    }
+
+    .teleprompter-viewport::-webkit-scrollbar { width: 6px; }
+    .teleprompter-viewport::-webkit-scrollbar-thumb { background: #70564b; border-radius: 9px; }
+
+    .teleprompter-text {
+      width: min(720px, 100%);
+      min-height: 260px;
+      color: #eee7e2;
+      font-size: 38px;
+      line-height: 1.54;
+      font-weight: 540;
+      letter-spacing: .015em;
+      white-space: pre-wrap;
+      transition: transform .2s ease, color .2s ease;
+    }
+
+    .teleprompter-text.is-empty {
+      color: #766a64;
+      font-size: 31px;
+      line-height: 1.66;
+    }
+
+    .preview-card.light {
+      background: #f5f0eb;
+    }
+
+    .preview-card.light .teleprompter-text { color: #211d1a; }
+    .preview-card.light .teleprompter-text.is-empty { color: #91847c; }
+    .preview-card.mirrored .teleprompter-text { transform: scaleX(-1); }
+
+    .guide-line {
+      position: absolute;
+      z-index: 2;
+      left: 24px;
+      right: 24px;
+      top: 52%;
+      height: 1px;
+      background: rgba(201, 143, 112, .48);
+      box-shadow: 0 0 12px rgba(201, 143, 112, .14);
+      pointer-events: none;
+    }
+
+    .guide-line.hidden { display: none; }
+
+    .stage-footer {
+      padding-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .progress-side {
+      min-width: 250px;
+      flex: 1;
+    }
+
+    .progress-meta {
+      margin-bottom: 9px;
+      display: flex;
+      justify-content: space-between;
+      color: #77706c;
+      font-size: 10px;
+    }
+
+    .progress-track {
+      height: 3px;
+      overflow: hidden;
+      border-radius: 99px;
+      background: rgba(255,255,255,.08);
+    }
+
+    .progress-fill {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #b8765d, #e2b99e);
+      transition: width .15s linear;
+    }
+
+    .primary {
+      height: 47px;
+      padding: 0 20px;
+      flex: none;
+      border: 1px solid #efd2be;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: linear-gradient(145deg, #e7c0a5, #c98f70);
+      color: #291d18;
+      font-weight: 720;
+      box-shadow: 0 12px 30px rgba(166, 102, 72, .21), inset 0 1px 0 rgba(255,255,255,.35);
+      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+    }
+
+    .primary:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+      box-shadow: 0 15px 36px rgba(166, 102, 72, .27), inset 0 1px 0 rgba(255,255,255,.4);
+    }
+
+    .primary svg { width: 18px; height: 18px; }
+
+    .controls {
+      margin-top: 14px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(255,255,255,.065);
+      border-radius: 12px;
+      background: rgba(255,255,255,.018);
+      color: #8b837e;
+    }
+
+    .control-btn {
+      min-height: 30px;
+      padding: 0 10px;
+      border: 1px solid transparent;
+      border-radius: 7px;
+      background: transparent;
+      color: #8f8782;
+      font-size: 11px;
+    }
+
+    .control-btn:hover, .control-btn.active {
+      border-color: var(--line);
+      background: rgba(255,255,255,.035);
+      color: #d8cec8;
+    }
+
+    .control-spacer { flex: 1; }
+    .speed-value { min-width: 82px; text-align: center; font-size: 10px; }
+    .file-input { display: none; }
+
+    .fullscreen-mode .topbar,
+    .fullscreen-mode .editor-card,
+    .fullscreen-mode .stage-heading,
+    .fullscreen-mode .stage-footer,
+    .fullscreen-mode .controls { display: none; }
+
+    .fullscreen-mode .workspace {
+      max-width: none;
+      padding: 0;
+      display: block;
+    }
+
+    .fullscreen-mode .stage-column { height: 100vh; }
+    .fullscreen-mode .preview-card { min-height: 100vh; border: 0; border-radius: 0; }
+    .fullscreen-mode .teleprompter-viewport { padding: 20vh 8vw 45vh; }
+    .fullscreen-mode .teleprompter-text { width: min(1100px, 100%); margin: 0 auto; font-size: 58px; }
+
+    @media (max-width: 900px) {
+      .topbar { height: 88px; padding: 0 18px; }
+      .status-group { gap: 12px; }
+      .version { display: none; }
+      .workspace { grid-template-columns: 1fr; padding: 17px; }
+      .editor-card { min-height: 500px; }
+      .stage-heading { min-height: auto; }
+      .badges { padding-top: 31px; }
+    }
+
+    @media (max-width: 570px) {
+      .offline-status span:last-child { display: none; }
+      .workspace { padding: 12px; gap: 14px; }
+      .editor-card { padding: 22px 18px 17px; }
+      .stage-heading { display: block; padding-inline: 4px; }
+      .badges { padding-top: 10px; }
+      .preview-card { min-height: 390px; }
+      .teleprompter-viewport { padding: 90px 28px 100px; }
+      .teleprompter-text { font-size: 30px; }
+      .stage-footer { align-items: flex-end; }
+      .progress-side { min-width: 0; }
+      .primary { padding-inline: 14px; }
+      .controls { overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell" id="appShell">
+    <header class="topbar">
+      <div class="brand" aria-label="Телесуфлёр Dimova Studio">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+            <path d="M8.4 7.2 5.8 16M17.9 7.2 15.3 16"/>
+            <path d="M13.1 5.6 10 18.1" opacity=".55"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-name">Телесуфлёр</div>
+          <div class="brand-note">Dimova Studio · Personal Edition</div>
+        </div>
+      </div>
+      <div class="status-group">
+        <div class="offline-status"><span class="status-dot"></span><span>Работает без интернета</span></div>
+        <div class="version">Local · 1.0</div>
+      </div>
+    </header>
+
+    <section class="workspace">
+      <aside class="editor-card">
+        <p class="eyebrow">01 / Подготовка</p>
+        <h1>Ваш сценарий</h1>
+        <p class="helper">Вставьте текст или загрузите документ. Он остаётся на вашем компьютере.</p>
+
+        <div class="editor-actions">
+          <button class="btn btn-upload" id="uploadBtn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V3m0 0L7.5 7.5M12 3l4.5 4.5"/><path d="M5 13v5.5A2.5 2.5 0 0 0 7.5 21h9a2.5 2.5 0 0 0 2.5-2.5V13"/></svg>
+            Загрузить файл
+          </button>
+          <button class="btn" id="saveBtn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 3v13m0 0 4.5-4.5M12 16l-4.5-4.5"/><path d="M5 20h14"/></svg>
+            Сохранить TXT
+          </button>
+          <button class="btn btn-clear" id="clearBtn" type="button">Очистить</button>
+        </div>
+
+        <textarea class="script-editor" id="scriptEditor" spellcheck="true" placeholder="Вставьте сюда текст вашей презентации…&#10;&#10;Совет: отделяйте смысловые блоки пустой строкой, так вам будет легче ориентироваться во время выступления."></textarea>
+        <div class="editor-foot"><span id="wordCount">0 слов</span><span>Автосохранение включено</span></div>
+        <input class="file-input" id="fileInput" type="file" accept=".txt,text/plain">
+      </aside>
+
+      <section class="stage-column">
+        <div class="stage-heading">
+          <div>
+            <p class="eyebrow">02 / Репетиция</p>
+            <h2>Экран выступления</h2>
+            <p class="helper">Выберите комфортный размер и откройте на весь экран.</p>
+          </div>
+          <div class="badges" aria-label="Приватность">
+            <span class="badge">Приватно</span>
+            <span class="badge">Без подключения</span>
+          </div>
+        </div>
+
+        <div class="preview-card" id="previewCard">
+          <div class="preview-label">Live preview</div>
+          <div class="guide-line" id="guideLine"></div>
+          <div class="teleprompter-viewport" id="viewport">
+            <div class="teleprompter-text is-empty" id="teleprompterText">Здесь появится ваш текст.\n\nВставьте сценарий в редакторе.</div>
+          </div>
+        </div>
+
+        <div class="stage-footer">
+          <div class="progress-side">
+            <div class="progress-meta"><span>Прогресс выступления</span><span id="progressValue">0%</span></div>
+            <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+          </div>
+          <button class="primary" id="startBtn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M8 3H4a1 1 0 0 0-1 1v4M16 3h4a1 1 0 0 1 1 1v4M8 21H4a1 1 0 0 1-1-1v-4M16 21h4a1 1 0 0 0 1-1v-4"/></svg>
+            <span>Начать выступление</span>
+          </button>
+        </div>
+
+        <div class="controls" aria-label="Настройки телесуфлёра">
+          <button class="control-btn" id="fontDown" type="button">A−</button>
+          <button class="control-btn" id="fontUp" type="button">A+</button>
+          <button class="control-btn active" id="lineBtn" type="button">Линия</button>
+          <button class="control-btn" id="mirrorBtn" type="button">Зеркально</button>
+          <button class="control-btn" id="themeBtn" type="button">Светлый экран</button>
+          <span class="control-spacer"></span>
+          <button class="control-btn" id="speedDown" type="button">−</button>
+          <span class="speed-value" id="speedValue">Скорость 1.0×</span>
+          <button class="control-btn" id="speedUp" type="button">+</button>
+          <button class="control-btn" id="autoBtn" type="button">Автопрокрутка</button>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const el = (id) => document.getElementById(id);
+      const appShell = el('appShell');
+      const editor = el('scriptEditor');
+      const fileInput = el('fileInput');
+      const viewport = el('viewport');
+      const output = el('teleprompterText');
+      const preview = el('previewCard');
+      const guide = el('guideLine');
+      const progressFill = el('progressFill');
+      const progressValue = el('progressValue');
+      const startBtn = el('startBtn');
+      const autoBtn = el('autoBtn');
+      const speedValue = el('speedValue');
+
+      const emptyCopy = 'Здесь появится ваш текст.\n\nВставьте сценарий в редакторе.';
+      let fontSize = 38;
+      let speed = 1;
+      let scrolling = false;
+      let raf = 0;
+      let lastFrame = 0;
+
+      function pluralWords(number) {
+        const mod10 = number % 10;
+        const mod100 = number % 100;
+        if (mod10 === 1 && mod100 !== 11) return 'слово';
+        if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return 'слова';
+        return 'слов';
+      }
+
+      function updateText() {
+        const value = editor.value.trim();
+        output.textContent = value || emptyCopy;
+        output.classList.toggle('is-empty', !value);
+        output.style.fontSize = value ? fontSize + 'px' : Math.min(fontSize, 31) + 'px';
+        const count = value ? value.split(/\s+/).filter(Boolean).length : 0;
+        el('wordCount').textContent = `${count} ${pluralWords(count)}`;
+        localStorage.setItem('dimova-teleprompter-script', editor.value);
+        viewport.scrollTop = 0;
+        updateProgress();
+      }
+
+      function updateProgress() {
+        const max = Math.max(0, viewport.scrollHeight - viewport.clientHeight);
+        const progress = max ? Math.min(100, Math.round((viewport.scrollTop / max) * 100)) : 0;
+        progressFill.style.width = progress + '%';
+        progressValue.textContent = progress + '%';
+        if (progress >= 100 && scrolling) toggleAuto(false);
+      }
+
+      function tick(time) {
+        if (!scrolling) return;
+        if (!lastFrame) lastFrame = time;
+        const delta = Math.min(40, time - lastFrame);
+        lastFrame = time;
+        viewport.scrollTop += delta * 0.028 * speed;
+        updateProgress();
+        raf = requestAnimationFrame(tick);
+      }
+
+      function toggleAuto(force) {
+        scrolling = typeof force === 'boolean' ? force : !scrolling;
+        autoBtn.classList.toggle('active', scrolling);
+        autoBtn.textContent = scrolling ? 'Пауза' : 'Автопрокрутка';
+        lastFrame = 0;
+        cancelAnimationFrame(raf);
+        if (scrolling) raf = requestAnimationFrame(tick);
+      }
+
+      async function toggleFullscreen() {
+        const entering = !document.fullscreenElement;
+        try {
+          if (entering) await document.documentElement.requestFullscreen();
+          else await document.exitFullscreen();
+        } catch (_) {
+          appShell.classList.toggle('fullscreen-mode', entering);
+        }
+      }
+
+      document.addEventListener('fullscreenchange', () => {
+        const full = Boolean(document.fullscreenElement);
+        appShell.classList.toggle('fullscreen-mode', full);
+        startBtn.querySelector('span').textContent = full ? 'Выйти из режима' : 'Начать выступление';
+        setTimeout(updateProgress, 100);
+      });
+
+      editor.addEventListener('input', updateText);
+      viewport.addEventListener('scroll', updateProgress, { passive: true });
+      el('uploadBtn').addEventListener('click', () => fileInput.click());
+      fileInput.addEventListener('change', async () => {
+        const file = fileInput.files && fileInput.files[0];
+        if (!file) return;
+        editor.value = await file.text();
+        updateText();
+      });
+
+      el('saveBtn').addEventListener('click', () => {
+        const blob = new Blob([editor.value], { type: 'text/plain;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'сценарий.txt';
+        link.click();
+        setTimeout(() => URL.revokeObjectURL(link.href), 500);
+      });
+
+      el('clearBtn').addEventListener('click', () => {
+        editor.value = '';
+        updateText();
+        editor.focus();
+      });
+
+      el('fontDown').addEventListener('click', () => { fontSize = Math.max(24, fontSize - 3); updateText(); });
+      el('fontUp').addEventListener('click', () => { fontSize = Math.min(76, fontSize + 3); updateText(); });
+      el('lineBtn').addEventListener('click', (event) => {
+        guide.classList.toggle('hidden');
+        event.currentTarget.classList.toggle('active', !guide.classList.contains('hidden'));
+      });
+      el('mirrorBtn').addEventListener('click', (event) => {
+        preview.classList.toggle('mirrored');
+        event.currentTarget.classList.toggle('active', preview.classList.contains('mirrored'));
+      });
+      el('themeBtn').addEventListener('click', (event) => {
+        preview.classList.toggle('light');
+        event.currentTarget.classList.toggle('active', preview.classList.contains('light'));
+      });
+      el('speedDown').addEventListener('click', () => {
+        speed = Math.max(.4, +(speed - .2).toFixed(1));
+        speedValue.textContent = `Скорость ${speed.toFixed(1)}×`;
+      });
+      el('speedUp').addEventListener('click', () => {
+        speed = Math.min(3, +(speed + .2).toFixed(1));
+        speedValue.textContent = `Скорость ${speed.toFixed(1)}×`;
+      });
+      autoBtn.addEventListener('click', () => toggleAuto());
+      startBtn.addEventListener('click', toggleFullscreen);
+
+      document.addEventListener('keydown', (event) => {
+        if (event.code === 'Space' && document.activeElement !== editor) {
+          event.preventDefault();
+          toggleAuto();
+        }
+        if (event.code === 'Escape' && appShell.classList.contains('fullscreen-mode')) {
+          appShell.classList.remove('fullscreen-mode');
+        }
+        if (event.key === 'ArrowUp' && document.activeElement !== editor) viewport.scrollTop -= 50;
+        if (event.key === 'ArrowDown' && document.activeElement !== editor) viewport.scrollTop += 50;
+      });
+
+      const saved = localStorage.getItem('dimova-teleprompter-script');
+      if (saved) editor.value = saved;
+      updateText();
+    })();
+
+    if ('serviceWorker' in navigator && location.protocol === 'https:') {
+      addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
+    }
+  </script>
+</body>
+</html>

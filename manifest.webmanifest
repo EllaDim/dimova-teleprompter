@@ -1,0 +1,11 @@
+{
+  "name": "Телесуфлёр · Dimova Studio",
+  "short_name": "Телесуфлёр",
+  "description": "Приватный локальный телесуфлёр для подготовки и репетиции выступлений.",
+  "lang": "ru",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0e0e10",
+  "theme_color": "#0e0e10"
+}
